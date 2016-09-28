@@ -1,6 +1,8 @@
 # vue-range-sliders
 Can use the slider in vue1.x and  vue2.x
 
+[demo](https://nightcatsama.github.io/vue-range-sliders/example/)
+
 ## Install
 ```
     npm install vue-range-sliders
@@ -9,6 +11,8 @@ Can use the slider in vue1.x and  vue2.x
 ## Plan
 
 - [x] Basis
+- [ ] According to the maximum & minimum 
+- [ ] piecewise style
 - [ ] Tooltip
 - [ ] Range
 
