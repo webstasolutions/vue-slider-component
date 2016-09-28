@@ -143,7 +143,7 @@ export default {
 			this.value = val
 			bool || this.setPosition()
 		},
-		setPosition(time=0.5) {
+		setPosition(time = 0.5) {
 			this.flag || this.setTransitionTime(time)
 			this.setTransform(this.position)
 			this.flag || this.setTransitionTime(0)
