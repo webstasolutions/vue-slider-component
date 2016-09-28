@@ -11,8 +11,8 @@ Can use the slider in vue1.x and  vue2.x
 ## Plan
 
 - [x] Basis
-- [ ] Display maximum value & minimum value 
-- [ ] piecewise style
+- [x] Display maximum value & minimum value
+- [x] piecewise style
 - [ ] Tooltip
 - [ ] Range
 
@@ -93,6 +93,8 @@ new Vue({
 | max         | Number        | 100      | The maximum value   |
 | interval    | Number        | 1        | The gap between the values |
 | show        | Boolean       | true     | display of the component |
+| disabled    | Boolean       | false    | whether to disable components |
+| piecewise   | Boolean       | false    | display of the piecewise |
 | val (vue>=2)| Number        | 1        | initial value (only vue2.x)|
 | value (vue>=1)| Number      | 1        | initial value, Two-way binding please use ```.sync``` (only vue1.x)|
 

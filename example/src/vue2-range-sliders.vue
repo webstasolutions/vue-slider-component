@@ -1,10 +1,10 @@
 <template>
-	<div v-el:wrap :class="['vue-range-wrap', { 'vue-range-disabled': disabled }]" v-show="show" :style="{ width: rangeWidth }">
+	<div ref="wrap" :class="['vue-range-wrap', { 'vue-range-disabled': disabled }]" v-show="show" :style="{ width: rangeWidth }">
 		<span class="vue-range-min">
 			<slot name="left">{{ min }}</slot>
 		</span>
-		<div v-el:elem class="vue-range" :style="{ height: `${height}px`, margin: `${dotSize / 2}px` }">
-			<div v-el:dot class="vue-range-dot" :style="{ width: `${dotSize}px`, height: `${dotSize}px`, top: `${(-(dotSize - height) / 2)}px` }"></div>
+		<div ref="elem" class="vue-range" :style="{ height: `${height}px`, margin: `${dotSize / 2}px` }">
+			<div ref="dot" class="vue-range-dot" :style="{ width: `${dotSize}px`, height: `${dotSize}px`, top: `${(-(dotSize - height) / 2)}px` }"></div>
 			<template v-if="piecewise">
 				<ul class="vue-range-piecewise">
 					<li v-for="(value, index) of total - 1" :style="{ width: `${height}px`, height: `${height}px`, top: `0px`, left: `${gap*(index + 1) - height / 2}px` }">
@@ -23,7 +23,8 @@ export default {
 	data() {
 		return {
 			flag: false,
-			w: 0
+			w: 0,
+			value: 0
 		}
 	},
 	props: {
@@ -63,7 +64,7 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		value: {
+		val: {
 			type: Number,
 			default: 0
 		}
@@ -79,7 +80,7 @@ export default {
 			return this.w / this.total
 		},
 		left: function() {
-			return this.$els.elem.getBoundingClientRect().left
+			return this.$refs.elem.getBoundingClientRect().left
 		},
 		position: function() {
 			return (this.value - this.min) / this.interval * this.gap
@@ -90,18 +91,18 @@ export default {
 	},
 	methods: {
 		bindEvent() {
-			this.$els.dot.addEventListener('mousedown', this.moveStart)
-			this.$els.wrap.addEventListener('click', this.wrapClick)
-			this.$els.wrap.addEventListener('mousemove', this.moveing)
-			this.$els.wrap.addEventListener('mouseup', this.moveEnd)
-			this.$els.wrap.addEventListener('mouseleave', this.moveEnd)
+			this.$refs.dot.addEventListener('mousedown', this.moveStart)
+			this.$refs.wrap.addEventListener('click', this.wrapClick)
+			this.$refs.wrap.addEventListener('mousemove', this.moveing)
+			this.$refs.wrap.addEventListener('mouseup', this.moveEnd)
+			this.$refs.wrap.addEventListener('mouseleave', this.moveEnd)
 		},
 		removeEvent() {
-			this.$els.dot.removeEventListener('mousedown', this.moveStart)
-			this.$els.wrap.removeEventListener('click', this.wrapClick)
-			this.$els.wrap.removeEventListener('mousemove', this.moveing)
-			this.$els.wrap.removeEventListener('mouseup', this.moveEnd)
-			this.$els.wrap.removeEventListener('mouseleave', this.moveEnd)
+			this.$refs.dot.removeEventListener('mousedown', this.moveStart)
+			this.$refs.wrap.removeEventListener('click', this.wrapClick)
+			this.$refs.wrap.removeEventListener('mousemove', this.moveing)
+			this.$refs.wrap.removeEventListener('mouseup', this.moveEnd)
+			this.$refs.wrap.removeEventListener('mouseleave', this.moveEnd)
 		},
 		wrapClick(e) {
 			if (this.disabled) return false
@@ -148,19 +149,19 @@ export default {
 			this.flag || this.setTransitionTime(0)
 		},
 		setTransform(val) {
-			this.$els.dot.style.transform = 'translateX(' + (val - (this.dotSize / 2)) + 'px)'
-			this.$els.dot.style.WebkitTransform = 'translateX(' + (val - (this.dotSize / 2)) + 'px)'
+			this.$refs.dot.style.transform = 'translateX(' + (val - (this.dotSize / 2)) + 'px)'
+			this.$refs.dot.style.WebkitTransform = 'translateX(' + (val - (this.dotSize / 2)) + 'px)'
 		},
 		setTransitionTime(time) {
-			time || this.$els.dot.offsetWidth
-			this.$els.dot.style.transitionDuration = time + 's'
-			this.$els.dot.style.webkitTransitionDuration = time + 's'
+			time || this.$refs.dot.offsetWidth
+			this.$refs.dot.style.transitionDuration = time + 's'
+			this.$refs.dot.style.webkitTransitionDuration = time + 's'
 		}
 	},
-	ready() {
-		this.w = this.$els.elem.offsetWidth
+	mounted() {
+		this.w = this.$refs.elem.offsetWidth
 		this.bindEvent()
-		this.setValue(this.value)
+		this.setValue(this.val)
 	},
 	destroyed() {
 		this.removeEvent()
@@ -214,6 +215,8 @@ export default {
 
     border-radius: 50%;
     background-color: #f1c40f;
+
+    transition: all 0s;
 }
 .vue-range-min, .vue-range-max {
 	font-size: 14px;
@@ -235,4 +238,3 @@ export default {
 	border-radius: 50%;
 }
 </style>
-
