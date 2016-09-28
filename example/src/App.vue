@@ -98,6 +98,7 @@ section {
 	padding: 40px 30px 20px 30px;
 	margin: 20px;
 	box-shadow: 0 0 5px 3px rgba(0, 0, 0, .36);
+	max-width: 800px;
 	overflow: hidden;
 	position: relative;
 }
@@ -145,7 +146,7 @@ button {
 
 code {
     padding: 10px 20px;
-    min-width: 250px;
+    min-width: 280px;
     display: inline-block;
     background-color: #333;
     color: #fff;
