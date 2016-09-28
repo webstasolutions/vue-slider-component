@@ -11,7 +11,7 @@ Can use the slider in vue1.x and  vue2.x
 ## Plan
 
 - [x] Basis
-- [ ] According to the maximum & minimum 
+- [ ] Display maximum value & minimum value 
 - [ ] piecewise style
 - [ ] Tooltip
 - [ ] Range
