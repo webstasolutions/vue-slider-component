@@ -1,19 +1,18 @@
 {
-  "name": "vue-range-sliders",
-  "version": "1.0.2",
-  "description": "Can use the Slider component in vue1.x and  vue2.x",
+  "name": "vue-slider-component",
+  "version": "1.0.0",
+  "description": "Can use the Slider component in vue1.x and vue2.x",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NightCatSama/vue-range-sliders.git"
+    "url": "git+https://github.com/NightCatSama/vue-slider-component.git"
   },
   "author": "NightCatSama",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/NightCatSama/vue-range-sliders/issues"
+    "url": "https://github.com/NightCatSama/vue-slider-component/issues"
   },
-  "homepage": "https://github.com/NightCatSama/vue-range-sliders#readme"
+  "homepage": "https://github.com/NightCatSama/vue-slider-component#readme"
 }

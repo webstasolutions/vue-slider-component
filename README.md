@@ -1,19 +1,21 @@
-# vue-range-sliders
+# vue-slider-component
 Can use the slider in vue1.x and  vue2.x
 
-[demo](https://nightcatsama.github.io/vue-range-sliders/example/)
+[demo](https://nightcatsama.github.io/vue-slider-component/example/)
 
 ## Install
 ```
-    npm install vue-range-sliders
+    npm install vue-slider-component
 ```
 
-## Plan
+## Todo
 
 - [x] Basis
 - [x] Display maximum value & minimum value
 - [x] piecewise style
-- [ ] Tooltip
+- [x] Compatible with PC and mobile terminal
+- [x] Tooltip
+- [ ] The custom data
 - [ ] Range
 
 ## usage
@@ -23,16 +25,16 @@ e.g:
 ```
 <template>
     <div>
-        <vue-range v-ref:range :min="1" :max="100" :interval="3" :value.sync="val" @callback="getValue"></vue-range>
+        <vue-slider v-ref:slider :value.sync="val" @callback="getValue"></vue-slider>
     </div>
 </template>
 <script>
-import { vueRange }  from 'vue-range-sliders';
+import { vueSlider }  from 'vue-slider-component';
 
 new Vue({
   el: '#app',
   components: {
-    vueRange
+    vueSlider
   },
   data: {
     val: 1
@@ -40,6 +42,9 @@ new Vue({
   methods: {
     getValue(val) {
       console.log(val)
+    },
+    setValue(num) {
+      this.$refs.slider.setValue(num)
     }
   }
 });
@@ -53,17 +58,17 @@ e.g:
 ```
 <template>
     <div>
-        <vue-range ref="range" :min="1" :max="100" :val="val" @callback="getValue"></vue-range>
+        <vue-slider ref="slider" :val="val" @callback="getValue"></vue-slider>
     </div>
 </template>
 <script>
-//  import { vue2Range }  from 'vue-range-sliders';
-import vueRange from './vue-range-sliders/vue2-range-sliders.vue'
+// import { vue2Slider as vueSlider } from 'vue-sliders-component';
+import vueSlider from 'vue-sliders-component/vue2-sliders.vue'
 
 new Vue({
   el: '#app',
   components: {
-    vueRange
+    vueSlider
   },
   data: {
     val: 1
@@ -74,7 +79,7 @@ new Vue({
     },
     setValue(num) {
       this.val = num
-      this.$refs.range.setValue(num)
+      this.$refs.slider.setValue(num)
     }
   }
 });
@@ -95,15 +100,41 @@ new Vue({
 | show        | Boolean       | true     | display of the component |
 | disabled    | Boolean       | false    | whether to disable components |
 | piecewise   | Boolean       | false    | display of the piecewise |
+| tooltip     | String,Boolean| false    | control the tooltip ['hover', 'always', false] |
 | val (vue>=2)| Number        | 1        | initial value (only vue2.x)|
 | value (vue>=1)| Number      | 1        | initial value, Two-way binding please use ```.sync``` (only vue1.x)|
 
 ### Function
-| Name        | Params&Type   | Require  | Description  |
+| Name        | Params&Type   | Description  |
 | ----------- |:--------------| ---------|--------------|
-| setValue    | value[Number] | true     | set value of the component |
+| setValue    | value[Number] | set value of the component |
+| refresh     | null          | Refresh the component      |
+
 
 ### Events
 | Name        | Params&Type   | Description  |
 | ----------- |:--------------|--------------|
 | callback    | value[Number] | values change when the callback function |
+
+### Slot
+
+default:
+```
+<slot name="left">{{ min }}</slot>
+<slot name="right">{{ max }}</slot>
+```
+
+custom:
+```
+<template>
+  <vue-slider ref="slider" :min="minimum" :max="maximum" :val="val" @callback="getValue">
+    <p slot="left">${{ minimum }}.00</p>
+    <p slot="right">${{ maximum }}.00</p>
+    <!-- or -->
+    <!--
+      <span slot="left"></span>
+      <p slot="right">value: {{ val }}</p>
+    -->
+  </vue-slider>
+</template>
+```

@@ -1,7 +1,6 @@
-import vueRange from './vue-range-sliders.vue'
-import vue2Range from './vue2-range-sliders.vue'
-
+import vueSlider from './vue-slider.vue'
+import vue2Slider from './vue2-slider.vue'
 export {
-  vueRange,
-  vue2Range
+  vueSlider,
+  vue2Slider
 }

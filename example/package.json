@@ -1,7 +1,7 @@
 {
   "name": "vue-range",
   "description": "A Vue.js project",
-  "author": "陈慕杰 <642163903@qq.com>",
+  "author": "NightCatSama <642163903@qq.com>",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --hot",
