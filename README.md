@@ -5,7 +5,7 @@ Can use the slider in vue1.x and  vue2.x
 
 ## Install
 ```
-    npm install vue-slider-component
+npm install vue-slider-component
 ```
 
 ## Todo
