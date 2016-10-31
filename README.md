@@ -80,13 +80,6 @@ e.g:
 </template>
 <script>
 import vueSlider from 'vue-slider-component'
-/*
-  because in the runtime-only build doesn't work
-  The solution is modify setting in webpack config
-  resolve: {
-    alias: {vue: 'vue/dist/vue.js'}
-  }
-*/
 
 new Vue({
   el: '#app',
@@ -117,10 +110,10 @@ new Vue({
 | class-name  | String        | null     | the custom class |
 | styles      | Object        | null     | the custom styles |
 | direction   | String        | horizontal | set the direction of the component, optional value: ['horizontal', 'vertical'] |
-| eventType   | String        | auto   | the event type, optional value: ['auto', 'touch', 'mouse', 'none'] |
+| event-type  | String        | auto   | the event type, optional value: ['auto', 'touch', 'mouse', 'none'] |
 | width       | Number[,String(in horizontal)] | 150      | width of the component |
 | height      | Number[,String(in vertical)] | 4        | height of the component |
-| dotSize     | Number        | 15       | size of the sliders |
+| dot-size    | Number        | 15       | size of the sliders |
 | min         | Number        | 0        | the minimum value   |
 | max         | Number        | 100      | the maximum value   |
 | interval    | Number        | 1        | the gap between the values |
@@ -129,7 +122,8 @@ new Vue({
 | disabled    | Boolean       | false    | whether to disable components |
 | piecewise   | Boolean       | false    | display of the piecewise |
 | tooltip     | String,Boolean| false    | control the tooltip, optional value: ['hover', 'always', false] |
-| tooltipDir  | String        | top(in horizontal)or left(in vertical) | set the direction of the tooltip, optional value: ['top', 'bottom', 'left', 'right'] |
+| tooltip-dir | String        | top(in horizontal)or left(in vertical) | set the direction of the tooltip, optional value: ['top', 'bottom', 'left', 'right'] |
+| reverse     | Boolean       | false    | whether the component reverse (such as Right to left, Top to bottom) |
 | val         | Number,Array  | 0        | initial value (if the value for the array open range model) |
 | data        | Array         | null     | the custom data |
 
