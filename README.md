@@ -4,16 +4,29 @@ Can use the slider in vue1.x and  vue2.x
 [Live Demo](https://nightcatsama.github.io/vue-slider-component/example/)
 
 ## Install
-```
+``` bash
 npm install vue-slider-component
 ```
 
-## Log
+## Example
+``` bash
+cd example/
 
-### 2016/11/11  ver.2.x
- + remove class-name & styles (can use vue native props [style, class])
- + remove val prop, use v-model set value (Don't need to manually two-way binding)
- + Optimize the click range
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:9000
+npm run dev
+npm run build
+```
+
+## Update
+
+ - Remove class-name & styles (can use vue native props [style, class])
+ - Remove val prop, use v-model set value (Don't need to manually two-way binding)
+ - Optimize the click range
+ - Add lazy Prop
+ - Support array setIndex method parameters
 
 ## Todo
 
@@ -115,12 +128,13 @@ import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
 | interval    | Number        | 1        | the gap between the values |
 | show        | Boolean       | true     | display of the component |
 | speed       | Number        | 0.5      | transition time |
+| lazy        | Boolean       | false    | only support vue2, at the end of the drag and drop, to synchronization value (if each update to high consumption of operation (such as Ajax), it is more useful) |
 | disabled    | Boolean       | false    | whether to disable components |
 | piecewise   | Boolean       | false    | display of the piecewise |
 | tooltip     | String,Boolean| false    | control the tooltip, optional value: ['hover', 'always', false] |
 | tooltip-dir | String        | top(in horizontal)or left(in vertical) | set the direction of the tooltip, optional value: ['top', 'bottom', 'left', 'right'] |
 | reverse     | Boolean       | false    | whether the component reverse (such as Right to left, Top to bottom) |
-| val         | Number,Array  | 0        | initial value (if the value for the array open range model) |
+| value       | Number,Array  | 0        | initial value (if the value for the array open range model) |
 | data        | Array         | null     | the custom data |
 
 
