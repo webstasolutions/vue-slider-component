@@ -129,7 +129,7 @@ import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
 | value       | Number,Array  | 0        | initial value (if the value for the array open range model) |
 | data        | Array         | null     | the custom data. |
 | lazy*       | Boolean       | false    | At the end of the drag and drop, to synchronization value (if each update to high consumption of operation (such as Ajax), it is more useful) |
-| format*     | String,Function | null   | Formatting a tooltip values, Example: `format='¥{ value }' or `format: (v) => `¥${v}`. [demo here](https://nightcatsama.github.io/vue-slider-component/example/#demo4) |
+| format*     | String,Function | null   | Formatting a tooltip values, Example: `format='¥{ value }'` or `` format: (v) => `¥${v}` ``. [demo here](https://nightcatsama.github.io/vue-slider-component/example/#demo4) |
 | bg-style*     | Object | null  | The style of the background. |
 | slider-style*     | Object | null  | The style of the slider. |
 | process-style*     | Object | null  | The style of the process bar. |
@@ -153,17 +153,18 @@ prop*: [only support vue2]
 | Name          | Type          | Description  |
 | --------------|:--------------|--------------|
 | callback      | Params: value[Number]  | values change when the callback function |
-| drag-start    | Params: context[Object]| Drag the start event |
+| drag-start    | Params: context[Object]| Drag the staUnable to initialize the width componentsrt event |
 | drag-end      | Params: context[Object]| Drag the end event |
 
 ## Exceptions
-if the component initialization in a `v-show="false"` container, will appear exception( The slider cannot be used, bu ).
+if the component initialization in a `v-show="false"` container, will appear exception( The slider cannot be used, because the component unable to initialize the width in `display: none` ).
 
 The solution:
-1. using `v-if` instead of `v-show`.
-2. use prop `show` to control display.
-3. After the set `v-show="true"`, to call the `refresh` method.
-example: 
+ 1. using `v-if` instead of `v-show`.
+ 2. use prop `show` to control display.
+ 3. After the set `v-show="true"`, to call the `refresh` method.
+
+for example: 
 ```
 this.show = true
 this.$nextTick(() => {
