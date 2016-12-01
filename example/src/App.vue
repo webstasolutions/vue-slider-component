@@ -19,23 +19,22 @@
 				<h2>Usage</h2>
 				<code class="language-html">&lt;template>
 	&lt;div>
-		&lt;vue-slider v-ref:slider v-model="value">&lt;/vue-slider>
+		&lt;vue-slider v-model="value">&lt;/vue-slider>
 	&lt;/div>
 &lt;/template>
 &lt;script>
 import vueSlider from 'vue-slider-component';
 
-new Vue({
-	el: '#app',
+export default {
 	components: {
 		vueSlider
 	},
 	data: function() {
 		return {
-			value: 1
+			value: 0
 		}
 	}
-});
+}
 &lt;/script></code>
 			</div>
 		</div>
@@ -44,8 +43,8 @@ new Vue({
 </template>
 
 <script>
-import demo from './demo.vue'
-import MyCanvas from './canvas.js'
+import demo from './demo'
+import MyCanvas from './canvas'
 const _isMobile = /(iPhone|iPad|iPod|iOS|Android|SymbianOS|Windows Phone|Mobile)/i.test(navigator.userAgent)
 
 export default {
@@ -56,23 +55,25 @@ export default {
 		return {
 			scrollTop: 0,
 			_offsetHeight: 0,
-			myCanvas: null,
-			template_str: `<vue-slider v-ref:slider v-model="value"></vue-slider>`
+			myCanvas: null
 		}
 	},
 	watch: {
 		scrollTop: function(v) {
+			this.isScreen(v)
+		}
+	},
+	methods: {
+		scroll(e) {
+			this.scrollTop = document.body.scrollTop
+		},
+		isScreen(v) {
 			if (v > this._offsetHeight) {
 				this.myCanvas.stop()
 			}
 			else {
 				this.myCanvas.start()
 			}
-		}
-	},
-	methods: {
-		scroll(e) {
-			this.scrollTop = document.body.scrollTop
 		}
 	},
 	mounted() {
@@ -84,10 +85,12 @@ export default {
 				width:  header.offsetWidth,
 				height: this._offsetHeight,
 				txt: 'vue-slider-component',
+				time: 3,
 				font: _isMobile ? 'normal 30px Segoe UI' : 'normal 60px Segoe UI'
 			})
 			this.myCanvas.start()
 
+			// this.isScreen(document.body.scrollTop)
 			document.addEventListener('scroll', this.scroll, false)
 		})
 	}
@@ -108,10 +111,11 @@ body {
 	position: relative;
 	width:  100%;
 	background: #151515;
-	background: -webkit-linear-gradient(-98deg, #000 , #434343);
-	background: linear-gradient(-98deg, #000 , #434343);
+	background: -webkit-linear-gradient(-40deg, #000, #999);
+	background: linear-gradient(-40deg, #000, #999);
 	color: #fff;
 	text-align: center;
+	animation: mymove 2s linear 0s infinite;
 }
 
 .header h1 {
@@ -125,7 +129,7 @@ canvas {
 
 .link-group {
 	position: absolute;
-	top: 70%;
+	top: 65%;
 	left: 50%;
 	transform: translate(-50%, 0);
 }
@@ -139,7 +143,9 @@ canvas {
 
 @media (max-width: 768px) {
 	.link-group a {
-		font-size: 16px;	
+		font-size: 16px;
+		display: block;
+		margin: 0 0 30px 0;
 	}
 }
 

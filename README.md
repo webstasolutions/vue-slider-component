@@ -1,5 +1,10 @@
 # vue-slider-component
-Can use the slider in vue1.x and  vue2.x
+
+[![build](https://img.shields.io/wercker/ci/wercker/docs.svg)](https://github.com/NightCatSama/vue-slider-component)
+[![build](https://img.shields.io/badge/npm-1.0.4-blue.svg)](https://github.com/NightCatSama/vue-slider-component)
+[![build](https://img.shields.io/npm/l/express.svg)](https://github.com/NightCatSama/vue-slider-component)
+
+Can use the slider in vue1.x and vue2.x
 
 [Live Demo](https://nightcatsama.github.io/vue-slider-component/example/)
 
@@ -8,24 +13,17 @@ Can use the slider in vue1.x and  vue2.x
 npm install vue-slider-component
 ```
 
-## Example
-``` bash
-cd example/
-
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:9000
-npm run dev
-```
-
 ## Update
 
  - Remove class-name & styles (can use vue native props [style, class])
  - Remove val prop, use v-model set value (Don't need to manually two-way binding)
  - Optimize the click range
- - Add lazy Prop
+ - No longer update vue1.x, but still can be normal use
+ - Add `lazy` prop
  - Support array setIndex method parameters
+ - Support ie 9+
+ - Add props `*-style` for the custom style
+ - Add `format` prop
 
 ## Todo
 
@@ -38,21 +36,17 @@ npm run dev
 - [x] Range
 - [x] The vertical component
 
-## Example
 
-```
-cd vue-slider-component/example
-```
-```
+## Example
+``` bash
+cd example/
+
+# install dependencies
 npm install
-```
-```
+
+# serve with hot reload at localhost:9000
 npm run dev
 ```
-```
-npm run build
-```
-
 
 ## usage
 Use in vue1.x
@@ -119,32 +113,38 @@ import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
 | ----------- |:--------------| ---------|--------------|
 | direction   | String        | horizontal | set the direction of the component, optional value: ['horizontal', 'vertical'] |
 | event-type  | String        | auto   | the event type, optional value: ['auto', 'touch', 'mouse', 'none'] |
-| width       | Number[,String(in horizontal)] | 150      | width of the component |
-| height      | Number[,String(in vertical)] | 4        | height of the component |
-| dot-size    | Number        | 15       | size of the sliders |
+| width       | Number[,String(in horizontal)] | auto | width of the component |
+| height      | Number[,String(in vertical)] | 6        | height of the component |
+| dot-size    | Number        | 16       | size of the sliders |
 | min         | Number        | 0        | the minimum value   |
 | max         | Number        | 100      | the maximum value   |
 | interval    | Number        | 1        | the gap between the values |
 | show        | Boolean       | true     | display of the component |
 | speed       | Number        | 0.5      | transition time |
-| lazy        | Boolean       | false    | only support vue2, at the end of the drag and drop, to synchronization value (if each update to high consumption of operation (such as Ajax), it is more useful) |
 | disabled    | Boolean       | false    | whether to disable components |
 | piecewise   | Boolean       | false    | display of the piecewise |
 | tooltip     | String,Boolean| false    | control the tooltip, optional value: ['hover', 'always', false] |
 | tooltip-dir | String        | top(in horizontal)or left(in vertical) | set the direction of the tooltip, optional value: ['top', 'bottom', 'left', 'right'] |
 | reverse     | Boolean       | false    | whether the component reverse (such as Right to left, Top to bottom) |
 | value       | Number,Array  | 0        | initial value (if the value for the array open range model) |
-| data        | Array         | null     | the custom data |
+| data        | Array         | null     | the custom data. |
+| lazy*       | Boolean       | false    | At the end of the drag and drop, to synchronization value (if each update to high consumption of operation (such as Ajax), it is more useful) |
+| format*     | String,Function | null   | Formatting a tooltip values, Example: `format='¥{ value }' or `format: (v) => `¥${v}`. [demo here](https://nightcatsama.github.io/vue-slider-component/example/#demo4) |
+| bg-style*     | Object | null  | The style of the background. |
+| slider-style*     | Object | null  | The style of the slider. |
+| process-style*     | Object | null  | The style of the process bar. |
+| piecewise-style*     | Object | null  | The style of the piecewise dot. |
 
+prop*: [only support vue2]
 
 ### Function
-| Name        | Type                         | Description  |
-| ----------- |:-----------------------------| -------------|
-| setValue    | Params: value[Number, Array] | set value of the component |
-| setIndex    | Params: index*[Number]       | set index of the component  |
-| getValue    | Return: value[Number, Array] | get value of the component |
-| getIndex    | Return: index*[Number]       | get index of the component |
-| refresh     | null                         | Refresh the component      |
+| Name        | Type           | Description                |
+| ----------- |:---------------| ---------------------------|
+| setValue    | Params: value  | set value of the component |
+| setIndex    | Params: index* | set index of the component |
+| getValue    | Return: value  | get value of the component |
+| getIndex    | Return: index* | get index of the component |
+| refresh     | null           | Refresh the component      |
 
 * [ index ] is the index to the array in the custom data model *
 * [ index ] is equal to (( value - min ) / interval ) in normal mode *
@@ -156,7 +156,21 @@ import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
 | drag-start    | Params: context[Object]| Drag the start event |
 | drag-end      | Params: context[Object]| Drag the end event |
 
+## Exceptions
+if the component initialization in a `v-show="false"` container, will appear exception( The slider cannot be used, bu ).
+
+The solution:
+1. using `v-if` instead of `v-show`.
+2. use prop `show` to control display.
+3. After the set `v-show="true"`, to call the `refresh` method.
+example: 
+```
+this.show = true
+this.$nextTick(() => {
+    this.$refs.slider.refresh()
+})
+```
 
 ## License
 
-[The MIT License](https://nightcatsama.github.io/vue-slider-component/LICENSE)
+[MIT](https://github.com/NightCatSama/vue-slider-component/blob/master/LICENSE)
