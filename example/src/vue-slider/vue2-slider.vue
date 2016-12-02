@@ -1,33 +1,42 @@
 <template>
 	<div ref="wrap" :class="['vue-slider-wrap', flowDirection, disabledClass]" v-show="show" :style="wrapStyles" @click="wrapClick">
-		<div ref="elem" class="vue-slider" :style="elemStyles">
+		<div ref="elem" class="vue-slider" :style="[elemStyles, bgStyle]">
 			<template v-if="isMoblie">
 				<template v-if="isRange">
-					<div ref="dot0" :data-slierValue="val[0]" :class="[ tooltipStatus, 'vue-slider-tooltip-' + tooltipDirection, 'vue-slider-dot']" :style="dotStyles" @touchstart="moveStart(0)"></div>
-					<div ref="dot1" :data-slierValue="val[1]" :class="[ tooltipStatus, 'vue-slider-tooltip-' + tooltipDirection, 'vue-slider-dot']" :style="dotStyles" @touchstart="moveStart(1)"></div>
+					<div ref="dot0" :class="[tooltipStatus, 'vue-slider-dot']" :style="[sliderStyle, dotStyles]" @touchstart="moveStart(0)">
+						<span :class="tooltipClass" :style="tooltipStyle">{{ formatter ? formatting(val[0]) : val[0] }}</span>
+					</div>
+					<div ref="dot1" :class="[tooltipStatus, 'vue-slider-dot']" :style="[sliderStyle, dotStyles]" @touchstart="moveStart(1)">
+						<span :class="tooltipClass" :style="tooltipStyle">{{ formatter ? formatting(val[1]) : val[1] }}</span>
+					</div>
 				</template>
 				<template v-else>
-					<div ref="dot" :data-slierValue="val" :class="[ tooltipStatus, 'vue-slider-tooltip-' + tooltipDirection, 'vue-slider-dot']" :style="dotStyles" @touchstart="moveStart"></div>
+					<div ref="dot" :class="[tooltipStatus, 'vue-slider-dot']" :style="[sliderStyle, dotStyles]" @touchstart="moveStart">
+						<span :class="tooltipClass" :style="tooltipStyle">{{ formatter ? formatting(val) : val}}</span>
+					</div>
 				</template>
 			</template>
 			<template v-else>
 				<template v-if="isRange">
-					<div ref="dot0" :data-slierValue="val[0]" :class="[ tooltipStatus, 'vue-slider-tooltip-' + tooltipDirection, 'vue-slider-dot']" :style="dotStyles" @mousedown="moveStart(0)"></div>
-					<div ref="dot1" :data-slierValue="val[1]" :class="[ tooltipStatus, 'vue-slider-tooltip-' + tooltipDirection, 'vue-slider-dot']" :style="dotStyles" @mousedown="moveStart(1)"></div>
+					<div ref="dot0" :class="[tooltipStatus, 'vue-slider-dot']" :style="[sliderStyle, dotStyles]" @mousedown="moveStart(0)">
+						<span :class="tooltipClass" :style="tooltipStyle">{{ formatter ? formatting(val[0]) : val[0] }}</span>
+					</div>
+					<div ref="dot1" :class="[tooltipStatus, 'vue-slider-dot']" :style="[sliderStyle, dotStyles]" @mousedown="moveStart(1)">
+						<span :class="tooltipClass" :style="tooltipStyle">{{ formatter ? formatting(val[1]) : val[1] }}</span>
+					</div>
 				</template>
 				<template v-else>
-					<div ref="dot" :data-slierValue="val" :class="[ tooltipStatus, 'vue-slider-tooltip-' + tooltipDirection, 'vue-slider-dot']" :style="dotStyles" @mousedown="moveStart"></div>
+					<div ref="dot" :class="[tooltipStatus, 'vue-slider-dot']" :style="[sliderStyle, dotStyles]" @mousedown="moveStart">
+						<span :class="tooltipClass" :style="tooltipStyle">{{ formatter ? formatting(val) : val}}</span>
+					</div>
 				</template>
 			</template>
 			<template v-if="piecewise">
-				<ul v-if="direction === 'vertical'" class="vue-slider-piecewise">
-					<li v-for="i in (total - 1)" :style="[ piecewiseStyle, { bottom: gap * i - width / 2 + 'px', left: '0px' }]"></li>
-				</ul>
-				<ul v-else class="vue-slider-piecewise">
-					<li v-for="i in (total - 1)" :style="[ piecewiseStyle, { left: gap * i - height / 2 + 'px', top: '0px' }]"></li>
+				<ul class="vue-slider-piecewise">
+					<li v-for="position in piecewiseDotPos" :style="[piecewiseStyles, piecewiseStyle, position]"></li>
 				</ul>
 			</template>
-			<div ref="process" class="vue-slider-process"></div>
+			<div ref="process" class="vue-slider-process" :style="processStyle"></div>
 		</div>
 	</div>
 </template>
@@ -48,7 +57,10 @@ export default {
 		},
 		height: {
 			type: [Number, String],
-			default: 4
+			default: 6
+		},
+		bgStyle: {
+			type: Object
 		},
 		data: {
 			type: Array,
@@ -57,6 +69,9 @@ export default {
 		dotSize: {
 			type: Number,
 			default: 16
+		},
+		sliderStyle: {
+			type: Object
 		},
 		min: {
 			type: Number,
@@ -82,6 +97,12 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		piecewiseStyle: {
+			type: Object
+		},
+		processStyle: {
+			type: Object
+		},
 		tooltip: {
 			type: [String, Boolean],
 			default: 'always'
@@ -97,6 +118,9 @@ export default {
 		tooltipDir: {
 			type: String
 		},
+		tooltipStyle: {
+			type: Object
+		},
 		reverse: {
 			type: Boolean,
 			default: false
@@ -109,23 +133,29 @@ export default {
 			type: Number,
 			default: 0.5
 		},
+		formatter: {
+			type: [String, Function]
+		},
 		value: {
 			type: [String, Number, Array],
 			default: 0
 		}
 	},
 	computed: {
-		flowDirection: function() {
+		flowDirection() {
 			return `vue-slider-${this.direction + (this.reverse ? '-reverse' : '')}`
 		},
-		tooltipDirection: function() {
+		tooltipDirection() {
 			return this.tooltipDir || (this.direction === 'vertical' ? 'left' : 'top')
 		},
-		tooltipStatus: function() {
+		tooltipStatus() {
 			if (this.tooltip === 'hover' && this.flag) return 'vue-slider-always'
 			return this.tooltip ? `vue-slider-${this.tooltip}` : ''
 		},
-		isMoblie: function() {
+		tooltipClass() {
+			return [`vue-slider-tooltip-${this.tooltipDirection}`, 'vue-slider-tooltip']
+		},
+		isMoblie() {
 			if (this.eventType === 'touch') {
 				return true
 			}
@@ -136,16 +166,16 @@ export default {
 				return /(iPhone|iPad|iPod|iOS|Android|SymbianOS|Windows Phone|Mobile)/i.test(navigator.userAgent)
 			}
 		},
-		isDisabled: function() {
+		isDisabled() {
 			return this.eventType === 'none' ? true : this.disabled
 		},
-		disabledClass: function() {
+		disabledClass() {
 			return this.disabled ? 'vue-slider-disabled' : ''
 		},
-		isRange: function() {
+		isRange() {
 			return Array.isArray(this.value)
 		},
-		slider: function() {
+		slider() {
 			if (this.isRange) {
 				return [this.$refs.dot0, this.$refs.dot1]
 			}
@@ -153,14 +183,14 @@ export default {
 				return this.$refs.dot
 			}
 		},
-		minimum: function() {
+		minimum() {
 			if (this.data) {
 				return 0
 			}
 			return this.min
 		},
 		val: {
-			get: function() {
+			get() {
 				if (this.data) {
 					if (this.isRange) {
 						return [this.data[this.currentValue[0]], this.data[this.currentValue[1]]]
@@ -169,7 +199,7 @@ export default {
 				}
 				return this.currentValue
 			},
-			set: function(val) {
+			set(val) {
 				if (this.data) {
 					if (this.isRange) {
 						let index0 = this.data.indexOf(val[0])
@@ -190,19 +220,19 @@ export default {
 				}
 			}
 		},
-		maximum: function() {
+		maximum() {
 			if (this.data) {
 				return this.data.length - 1
 			}
 			return this.max
 		},
-		spacing: function() {
+		spacing() {
 			if (this.data) {
 				return 1
 			}
 			return this.interval
 		},
-		total: function() {
+		total() {
 			if (this.data) {
 				return this.data.length - 1
 			}
@@ -211,31 +241,28 @@ export default {
 			}
 			return (this.maximum - this.minimum) / this.interval
 		},
-		gap: function() {
+		gap() {
 			return this.size / this.total
 		},
-		offset: function() {
-			return this.direction === 'vertical' ? (this.$refs.elem.getBoundingClientRect().top + window.pageYOffset || document.documentElement.scrollTop) : this.$refs.elem.getBoundingClientRect().left
-		},
-		position: function() {
+		position() {
 			if (this.isRange) {
 				return [(this.currentValue[0] - this.minimum) / this.spacing * this.gap, (this.currentValue[1] - this.minimum) / this.spacing * this.gap]
 			}
 			return (this.currentValue - this.minimum) / this.spacing * this.gap
 		},
-		limit: function() {
+		limit() {
 			if (this.isRange) {
 				return [[0, this.position[1]], [this.position[0], this.size]]
 			}
 			return [0, this.size]
 		},
-		valueLimit: function() {
+		valueLimit() {
 			if (this.isRange) {
 				return [[this.minimum, this.currentValue[1]], [this.currentValue[0], this.maximum]]
 			}
 			return [this.minimum, this.maximum]
 		},
-		wrapStyles: function() {
+		wrapStyles() {
 			if (this.direction === 'vertical') {
 				return {
 					height: typeof this.height === 'number' ? `${this.height}px` : this.height,
@@ -247,7 +274,7 @@ export default {
 				padding: `${this.dotSize / 2}px`
 			}
 		},
-		elemStyles: function() {
+		elemStyles() {
 			if (this.direction === 'vertical') {
 				return {
 					width: `${this.width}px`,
@@ -258,7 +285,7 @@ export default {
 				height: `${this.height}px`
 			}
 		},
-		dotStyles: function() {
+		dotStyles() {
 			if (this.direction === 'vertical') {
 				return {
 					width: `${this.dotSize}px`,
@@ -272,7 +299,7 @@ export default {
 				top: `${(-(this.dotSize - this.height) / 2)}px`
 			}
 		},
-		piecewiseStyle: function() {
+		piecewiseStyles() {
 			if (this.direction === 'vertical') {
 				return {
 					width: `${this.width}px`,
@@ -283,11 +310,31 @@ export default {
 				width: `${this.height}px`,
 				height: `${this.height}px`
 			}
+		},
+		piecewiseDotPos() {
+			let arr = []
+			for (let i = 1; i < this.total; i++) {
+				arr.push(this.direction === 'vertical' ? {
+					bottom: `${this.gap * i - this.width / 2}px`,
+					left: '0'
+				} : {
+					left: `${this.gap * i - this.height / 2}px`,
+					top: '0'
+				})
+			}
+			return arr
 		}
 	},
 	watch: {
-		value: function(val) {
+		value(val) {
 			this.flag || this.setValue(val)
+		},
+		show(bool) {
+			if (bool && !this.size) {
+				this.$nextTick(() => {
+					this.refresh()
+				})
+			}
 		}
 	},
 	methods: {
@@ -311,6 +358,14 @@ export default {
 				document.removeEventListener('mousemove', this.moving)
 				document.removeEventListener('mouseup', this.moveEnd)
 				document.removeEventListener('mouseleave', this.moveEnd)
+			}
+		},
+		formatting(value) {
+			if (typeof this.formatter === 'string') {
+				return this.formatter.replace(/\{value\}/, value)
+			}
+			else {
+				return this.formatter(value)
 			}
 		},
 		getPos(e) {
@@ -384,9 +439,7 @@ export default {
 				return true
 			}
 			else if (Array.isArray(a) && a.length === b.length) {
-				return a.some((v, i) => {
-					return v !== b[i]
-				})
+				return a.some((v, i) => v !== b[i])
 			}
 			return a !== b
 		},
@@ -513,8 +566,12 @@ export default {
 				return (this.currentValue - this.minimum) / this.spacing
 			}
 		},
-		refresh() {
+		getStaticData() {
 			this.size = this.direction === 'vertical' ? this.$refs.elem.offsetHeight : this.$refs.elem.offsetWidth
+			this.offset = this.direction === 'vertical' ? (this.$refs.elem.getBoundingClientRect().top + window.pageYOffset || document.documentElement.scrollTop) : this.$refs.elem.getBoundingClientRect().left
+		},
+		refresh() {
+			this.getStaticData()
 			this.setPosition(0)
 		}
 	},
@@ -522,13 +579,13 @@ export default {
 		window.addEventListener('resize', this.refresh)
 	},
 	mounted() {
-		this.$nextTick(function () {
-			this.size = this.direction === 'vertical' ? this.$refs.elem.offsetHeight : this.$refs.elem.offsetWidth
+		this.$nextTick(() => {
+			this.getStaticData()
 			this.setValue(this.value)
 			this.bindEvents()
 		})
 	},
-	destroyed() {
+	beforeDestroy() {
 		this.unbindEvents()
 	}
 }
@@ -617,8 +674,7 @@ export default {
 .vue-slider-vertical-reverse .vue-slider-dot {
 	top: 0;
 }
-.vue-slider-dot::after {
-	content: attr(data-slierValue);
+.vue-slider-tooltip {
 	display: none;
 	font-size: 14px;
 	white-space: nowrap;
@@ -628,89 +684,90 @@ export default {
 	text-align: center;
 	color: #fff;
 	border-radius: 5px;
+	border: 1px solid #3498db;
 	background-color: #3498db;
 	z-index: 9;
 }
-.vue-slider-dot.vue-slider-tooltip-top::after  {
+.vue-slider-tooltip.vue-slider-tooltip-top  {
 	top: -9px;
 	left: 50%;
 	transform: translate(-50%, -100%);
 }
-.vue-slider-dot.vue-slider-tooltip-bottom::after  {
+.vue-slider-tooltip.vue-slider-tooltip-bottom  {
 	bottom: -9px;
 	left: 50%;
 	transform: translate(-50%, 100%);
 }
-.vue-slider-dot.vue-slider-tooltip-left::after  {
+.vue-slider-tooltip.vue-slider-tooltip-left  {
 	top: 50%;
 	left: -9px;
 	transform: translate(-100%, -50%);
 }
-.vue-slider-dot.vue-slider-tooltip-right::after  {
+.vue-slider-tooltip.vue-slider-tooltip-right  {
 	top: 50%;
 	right: -9px;
 	transform: translate(100%, -50%);
 }
-.vue-slider-dot.vue-slider-tooltip-top::before {
+.vue-slider-tooltip.vue-slider-tooltip-top::before {
 	content: '';
-	display: none;
-	position: absolute;
-	top: -10px;
-	left: 50%;
-	width: 0;
-	height: 0;
-	border-width: 6px;
-	border-style: solid;
-	border-color: transparent;
-	border-top-color: #3498db;
-	transform: translate(-50%, 0);
-}
-.vue-slider-dot.vue-slider-tooltip-bottom::before {
-	content: '';
-	display: none;
 	position: absolute;
 	bottom: -10px;
 	left: 50%;
 	width: 0;
 	height: 0;
-	border-width: 6px;
+	border-width: 5px;
+	border-width: 6px\0;
 	border-style: solid;
 	border-color: transparent;
-	border-bottom-color: #3498db;
+	border-top-color: inherit;
 	transform: translate(-50%, 0);
 }
-.vue-slider-dot.vue-slider-tooltip-left::before  {
+.vue-slider-tooltip.vue-slider-tooltip-bottom::before {
 	content: '';
-	display: none;
 	position: absolute;
-	top: 50%;
-	left: -10px;
+	top: -10px;
+	left: 50%;
 	width: 0;
 	height: 0;
-	border-width: 6px;
+	border-width: 5px;
+	border-width: 6px\0;
 	border-style: solid;
 	border-color: transparent;
-	border-left-color: #3498db;
-	transform: translate(0, -50%);
+	border-bottom-color: inherit;
+	transform: translate(-50%, 0);
 }
-.vue-slider-dot.vue-slider-tooltip-right::before  {
+.vue-slider-tooltip.vue-slider-tooltip-left::before  {
 	content: '';
-	display: none;
 	position: absolute;
 	top: 50%;
 	right: -10px;
 	width: 0;
 	height: 0;
-	border-width: 6px;
+	border-width: 5px;
+	border-width: 6px\0;
 	border-style: solid;
 	border-color: transparent;
-	border-right-color: #3498db;
+	border-left-color: inherit;
 	transform: translate(0, -50%);
 }
-.vue-slider-dot.vue-slider-hover:hover::before, .vue-slider-dot.vue-slider-hover:hover::after {
+.vue-slider-tooltip.vue-slider-tooltip-right::before  {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: -10px;
+	width: 0;
+	height: 0;
+	border-width: 5px;
+	border-width: 6px\0;
+	border-style: solid;
+	border-color: transparent;
+	border-right-color: inherit;
+	transform: translate(0, -50%);
+}
+.vue-slider-dot.vue-slider-hover:hover .vue-slider-tooltip {
 	display: block;
 }
-.vue-slider-dot.vue-slider-always::before, .vue-slider-dot.vue-slider-always::after {
+.vue-slider-dot.vue-slider-always .vue-slider-tooltip {
 	display: block!important;
 }
 .vue-slider-piecewise {
