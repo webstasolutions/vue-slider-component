@@ -9,25 +9,31 @@ module.exports = {
     filename: 'build.js'
   },
   resolve: {
-    extensions: [ '', '.js', '.vue' ]
-  },
-  resolveLoader: {
-    root: path.join(__dirname, 'node_modules'),
+    extensions: ['.js', '.vue']
   },
   module: {
     loaders: [
       {
+        test: /\.(js|vue)$/,
+        loader: 'eslint-loader',
+        enforce: 'pre',
+        include: [path.resolve(__dirname, './src')],
+        options: {
+          formatter: require('eslint-friendly-formatter')
+        }
+      },
+      {
         test: /\.vue$/,
-        loader: 'vue'
+        loader: 'vue-loader'
       },
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         exclude: /node_modules/
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: 'file',
+        loader: 'file-loader',
         query: {
           name: '[name].[ext]?[hash]'
         }
