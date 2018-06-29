@@ -78,7 +78,8 @@
         >
           <div :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">
-              <span class="vue-slider-tooltip" :style="tooltipStyles"><input type="number" :max="max" :min="min" v-model.number="val" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}</span>
+              <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles"><input type="number" :max="max" :min="min" v-model.number="val" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}</span>
+              <span v-else class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
             </slot>
           </div>
         </div>
@@ -148,6 +149,10 @@
     export default {
         name: 'VueSliderComponent',
         props: {
+            hasInput: {
+                type: [Number, String],
+                default: false
+            },
             width: {
                 type: [Number, String],
                 default: 'auto'
