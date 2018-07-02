@@ -76,7 +76,7 @@
                 @mousedown="moveStart"
                 @touchstart="moveStart"
         >
-          <div :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
+          <div @click.stop="" :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">
               <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles"><input type="number" :max="max" :min="min" v-model.number="val" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}</span>
               <span v-else class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
