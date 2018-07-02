@@ -150,7 +150,7 @@
         name: 'VueSliderComponent',
         props: {
             hasInput: {
-                type: [Number, String],
+                type: [Boolean],
                 default: false
             },
             width: {
