@@ -135,7 +135,7 @@
           </slot>
         </div>
       </div>
-      <input v-if="!isRange && !data" class="vue-slider-sr-only" type="range" v-model="val" :min="min" :max="max" />
+      <input v-if="!isRange && !data" class="vue-slider-sr-only" type="range" v-model="val" :min="min" :max="max" tabindex="-1" />
     </div>
   </div>
 </template>
