@@ -297,7 +297,8 @@
                 currentValue: 0,
                 currentSlider: 0,
                 isComponentExists: true,
-                isMounted: false
+                isMounted: false,
+                clickOffset: 0
             }
         },
         computed: {
@@ -694,6 +695,7 @@
                     this.focusSlider = index
                 }
                 this.flag = true
+                this.clickOffset = this.$refs.dot.getBoundingClientRect().left - e.pageX;
                 this.$emit('drag-start', this)
             },
             moving (e) {
@@ -711,7 +713,7 @@
                     this.currentSlider = 1
                     this.setValueOnPos(this.processSign.pos[1] + this.getPos(e) - this.processSign.start, true)
                 } else {
-                    this.setValueOnPos(this.getPos(e), true)
+                    this.setValueOnPos(this.getPos(e) + (this.clickOffset === undefined ? 0 : this.clickOffset), true)
                 }
 
                 if (this.isRange && this.tooltipMerge) {
