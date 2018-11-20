@@ -569,6 +569,7 @@
                 document.addEventListener('keydown', this.handleKeydown)
                 document.addEventListener('keyup', this.handleKeyup)
                 window.addEventListener('resize', this.refresh)
+                window.addEventListener('refresh-slider', this.refresh)
 
                 if (this.isRange && this.tooltipMerge) {
                     this.$refs.dot0.addEventListener('transitionend', this.handleOverlapTooltip)
@@ -585,6 +586,7 @@
                 document.removeEventListener('keydown', this.handleKeydown)
                 document.removeEventListener('keyup', this.handleKeyup)
                 window.removeEventListener('resize', this.refresh)
+                window.removeEventListener('refresh-slider', this.refresh)
 
                 if (this.isRange && this.tooltipMerge) {
                     this.$refs.dot0.removeEventListener('transitionend', this.handleOverlapTooltip)
