@@ -78,7 +78,9 @@
         >
           <div @click.stop="" :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">
-              <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles"><input type="number" :max="max" :min="min" v-model.number="val" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}</span>
+              <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles">
+                <input type="number" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}
+              </span>
               <span v-else class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
             </slot>
           </div>
@@ -985,6 +987,13 @@
                     tooltip0.style.visibility = 'visible'
                     tooltip1.style.visibility = 'visible'
                     mergedTooltip.style.visibility = 'hidden'
+                }
+            },
+            handleInput(event){
+                let value = Number(event.target.value)
+
+                if(value >= this.minimum && value <= this.maximum){
+                    this.val = value;
                 }
             }
         },
