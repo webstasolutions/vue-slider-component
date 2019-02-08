@@ -699,7 +699,13 @@
                     this.focusSlider = index
                 }
                 this.flag = true
-                this.clickOffset = this.$refs.dot.getBoundingClientRect().left - e.pageX;
+
+                if (e.pageX === undefined){
+                    this.clickOffset = 0;
+                } else {
+                    this.clickOffset = this.$refs.dot.getBoundingClientRect().left - e.pageX;
+                }
+
                 this.$emit('drag-start', this)
             },
             moving (e) {
