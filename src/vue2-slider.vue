@@ -943,7 +943,6 @@
                 } else if (this.val >= this.maximum){
                     this.val = this.maximum;
                 }
-                console.log(this.val);
 
                 this.syncValue(noCb);
             },
