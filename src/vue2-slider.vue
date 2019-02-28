@@ -79,7 +79,7 @@
           <div @click.stop="" :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">
               <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles">
-                <input type="number" class="vue-slider-value-input" ref="valueInput" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}
+                <input type="number" class="vue-slider-value-input" ref="valueInput" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValueValidate()" @keyup.enter="syncValueValidate()">{{ formatting('') }}
               </span>
               <span v-else class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
             </slot>
@@ -937,8 +937,19 @@
                     return inRange(val)
                 }
             },
+            syncValueValidate (noCb) {
+                if(this.val <= this.minimum){
+                    this.val = this.minimum;
+                } else if (this.val >= this.maximum){
+                    this.val = this.maximum;
+                }
+                console.log(this.val);
+
+                this.syncValue(noCb);
+            },
             syncValue (noCb) {
                 let val = this.isRange ? this.val.concat() : this.val
+
                 this.$emit('input', val)
                 noCb || this.$emit('callback', val)
             },
@@ -1007,9 +1018,7 @@
             handleInput(event){
                 let value = Number(event.target.value)
 
-                if(value >= this.minimum && value <= this.maximum){
-                    this.val = value;
-                }
+                this.val = value;
             }
         },
         mounted () {
