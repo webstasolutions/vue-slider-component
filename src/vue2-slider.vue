@@ -79,7 +79,7 @@
           <div @click.stop="" :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">
               <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles">
-                <input type="number" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}
+                <input type="number" class="vue-slider-value-input" ref="valueInput" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValue()" @keyup.enter="syncValue()">{{ formatting('') }}
               </span>
               <span v-else class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
             </slot>
@@ -300,7 +300,8 @@
                 currentSlider: 0,
                 isComponentExists: true,
                 isMounted: false,
-                clickOffset: 0
+                clickOffset: 0,
+                moved: false
             }
         },
         computed: {
@@ -726,6 +727,8 @@
                     this.setValueOnPos(this.getPos(e) + (this.clickOffset === undefined ? 0 : this.clickOffset), true)
                 }
 
+                this.moved = true;
+
                 if (this.isRange && this.tooltipMerge) {
                     this.handleOverlapTooltip()
                 }
@@ -739,6 +742,12 @@
                     if (this.lazy && this.isDiff(this.val, this.value)) {
                         this.syncValue()
                     }
+
+                    let input = this.$refs.valueInput;
+                    if (input !== undefined && !this.moved){
+                        input.focus();
+                    }
+                    this.moved = false;
                 } else {
                     return false
                 }
@@ -1051,6 +1060,17 @@
     display: block;
     border-radius: 15px;
     background-color: #ccc;
+    cursor: pointer;
+  }
+  .vue-slider-component .vue-slider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -5px;
+    width: 100%;
+    height: calc(100% + 10px);
+    z-index: 2;
+    cursor: pointer;
   }
   .vue-slider-component .vue-slider::after {
     content: '';
@@ -1284,5 +1304,8 @@
     width: 1px;
     overflow: hidden;
     position: absolute !important;
+  }
+  .vue-slider-value-input{
+    pointer-events: none;
   }
 </style>
