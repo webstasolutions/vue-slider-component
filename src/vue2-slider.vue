@@ -81,7 +81,10 @@
               <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles">
                 <input type="number" class="vue-slider-value-input" ref="valueInput" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValueValidate()" @keyup.enter="syncValueValidate()">{{ formatting('') }}
               </span>
-              <span v-else class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
+              <template v-else>
+                <span v-if="hasTouchPreview && moved" class="vue-slider-tooltip vue-slider-tooltip-preview" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
+                <span class="vue-slider-tooltip" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
+              </template>
             </slot>
           </div>
         </div>
@@ -152,6 +155,10 @@
         name: 'VueSliderComponent',
         props: {
             hasInput: {
+                type: [Boolean],
+                default: false
+            },
+            hasTouchPreview: {
                 type: [Boolean],
                 default: false
             },
@@ -1171,6 +1178,12 @@
     border: 1px solid #3498db;
     background-color: #3498db;
   }
+  .vue-slider-component .vue-slider-tooltip-preview {
+     margin-bottom: 8px;
+     background: transparent !important;
+     border: 0 !important;
+     box-shadow: none !important;
+   }
   .vue-slider-component .vue-slider-tooltip-wrap.vue-slider-tooltip-top {
     top: -9px;
     left: 50%;
