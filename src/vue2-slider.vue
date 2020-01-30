@@ -1112,14 +1112,12 @@
     height: 100%;
     top: 0;
     left: 0;
-    will-change: width;
   }
   .vue-slider-component.vue-slider-vertical .vue-slider-process {
     width: 100%;
     height: 0;
     bottom: 0;
     left: 0;
-    will-change: height;
   }
   .vue-slider-component.vue-slider-horizontal-reverse .vue-slider-process {
     width: 0;
@@ -1139,7 +1137,6 @@
     background-color: #fff;
     box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
     transition: all 0s;
-    will-change: transform;
     cursor: pointer;
     z-index: 4;
   }
