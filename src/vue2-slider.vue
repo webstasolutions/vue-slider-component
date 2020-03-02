@@ -905,6 +905,7 @@
                 }
             },
             setTransitionTime (time) {
+              return false;
                 // In order to avoid browser merge style and modify together
                 time || this.$refs.process.offsetWidth
 
@@ -1100,7 +1101,7 @@
     position: absolute;
     border-radius: 15px;
     background-color: #3498db;
-    transition: all 0s;
+    transition: all 0s linear;
     z-index: 1;
   }
   .vue-slider-component .vue-slider-process.vue-slider-process-dragable {
@@ -1136,7 +1137,7 @@
     border-radius: 50%;
     background-color: #fff;
     box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
-    transition: all 0s;
+    transition: all 0s linear;
     cursor: pointer;
     z-index: 4;
   }
@@ -1289,7 +1290,7 @@
     border-radius: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    transition: all .3s;
+    transition: all .3s linear;
   }
   .vue-slider-component .vue-slider-piecewise-item:first-child .vue-slider-piecewise-dot, .vue-slider-component .vue-slider-piecewise-item:last-child .vue-slider-piecewise-dot {
     visibility: hidden;

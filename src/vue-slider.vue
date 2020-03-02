@@ -503,6 +503,7 @@ export default {
 			}
 		},
 		setTransitionTime(time) {
+			return false;
 			time || this.$els.process.offsetWidth
 			if (this.isRange) {
 				for (let i = 0; i < this.slider.length; i++) {
@@ -589,7 +590,7 @@ export default {
 	position: absolute;
 	border-radius: 15px;
 	background-color: #3498db;
-	transition: all 0s;
+	transition: all 0s linear;
 	z-index: 1;
 }
 .vue-slider-horizontal .vue-slider-process {
@@ -621,7 +622,7 @@ export default {
 	border-radius: 50%;
 	background-color: #fff;
 	box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 0.32);
-	transition: all 0s;
+	transition: all 0s linear;
 	cursor: pointer;
 	z-index: 3;
 }
