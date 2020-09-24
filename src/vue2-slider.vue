@@ -401,6 +401,9 @@
                     } else {
                         this.currentValue = val
                     }
+                    if (this.step) {
+                        this.currentValue -= val % this.step;
+                    }
                 }
             },
             currentIndex () {
