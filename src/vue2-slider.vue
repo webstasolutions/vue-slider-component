@@ -79,7 +79,7 @@
           <div @click.stop="" :class="['vue-slider-tooltip-' + tooltipDirection, 'vue-slider-tooltip-wrap']">
             <slot name="tooltip" :value="val">
               <span v-if="hasInput" class="vue-slider-tooltip" :style="tooltipStyles">
-                <input type="number" class="vue-slider-value-input" ref="valueInput" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValueValidate()" @keyup.enter="syncValueValidate()">{{ formatting('') }}
+                <input type="number" :step="step" class="vue-slider-value-input" ref="valueInput" :max="max" :min="min" v-bind:value="val" @input="handleInput" @blur="syncValueValidate()" @keyup.enter="syncValueValidate()">{{ formatting('') }}
               </span>
               <template v-else>
                 <span v-if="hasTouchPreview && moved" class="vue-slider-tooltip vue-slider-tooltip-preview" :style="tooltipStyles">{{ formatter ? formatting(val): val }}</span>
@@ -193,6 +193,10 @@
             max: {
                 type: Number,
                 default: 100
+            },
+            step: {
+                type: Number,
+                default: 1
             },
             interval: {
                 type: Number,
